@@ -1,46 +1,95 @@
 package smartlibrarysystem;
 
-class BookBST {
+public class BookBST {
+
     private Book root;
 
+
+    public BookBST() {
+        root = null;
+    }
+
     public void insert(int isbn, String title, String author) {
-        root = ins(root, isbn, title, author);
+        root = insertRecursive(root, isbn, title, author);
     }
 
-    private Book ins(Book r, int i, String t, String a) {
-        if (r == null) return new Book(i, t, a);
-        if (i < r.isbn)
-            r.left = ins(r.left, i, t, a);
-        else if (i > r.isbn)
-            r.right = ins(r.right, i, t, a);
-        else
+    private Book insertRecursive(Book node, int isbn, String title, String author) {
+
+        if (node == null) {
+            return new Book(isbn, title, author);
+        }
+
+        if (isbn < node.isbn) {
+            node.left = insertRecursive(node.left, isbn, title, author);
+        }
+        else if (isbn > node.isbn) {
+            node.right = insertRecursive(node.right, isbn, title, author);
+        }
+        else {
             System.out.println("ISBN already exists!");
-        return r;
+        }
+
+        return node;
     }
 
-    public Book search(int i) {
-        return sea(root, i);
+
+    public Book search(int isbn) {
+
+        if (isbn <= 0) {
+            System.out.println("Invalid ISBN.");
+            return null;
+        }
+
+        return searchRecursive(root, isbn);
     }
 
-    private Book sea(Book r, int i) {
-        if (r == null || r.isbn == i) return r;
-        return (i < r.isbn) ? sea(r.left, i) : sea(r.right, i);
+    private Book searchRecursive(Book node, int isbn) {
+
+        // Base Case 1: Book not found
+        if (node == null) {
+            return null;
+        }
+
+        // Base Case 2: Book found
+        if (node.isbn == isbn) {
+            return node;
+        }
+
+        // Recursive search in left subtree
+        if (isbn < node.isbn) {
+            return searchRecursive(node.left, isbn);
+        }
+
+        // Recursive search in right subtree
+        return searchRecursive(node.right, isbn);
     }
 
+    // Display all books
     public void displayAll() {
+
         if (root == null) {
             System.out.println("Catalogue is empty.");
-        } else {
-            System.out.println("All Books (sorted by ISBN):");
-            inOrder(root);
+            return;
         }
+
+        System.out.println("\n===== BOOK CATALOGUE =====");
+        inOrder(root);
     }
 
-    private void inOrder(Book r) {
-        if (r == null) return;
-        inOrder(r.left);
-        System.out.println("ISBN: " + r.isbn + " | Title: " + r.title + " | Author: " + r.author);
-        inOrder(r.right);
+    private void inOrder(Book node) {
+
+        if (node == null) {
+            return;
+        }
+
+        inOrder(node.left);
+
+        System.out.println(
+            "ISBN: " + node.isbn +
+            " | Title: " + node.title +
+            " | Author: " + node.author
+        );
+
+        inOrder(node.right);
     }
 }
-
