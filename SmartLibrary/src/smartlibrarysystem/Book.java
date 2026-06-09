@@ -15,4 +15,16 @@ public class Book {
         left = null;
         right = null;
     }
+    
+    public int getIsbn() {
+        return isbn;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
 }
