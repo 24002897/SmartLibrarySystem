@@ -1,4 +1,4 @@
-public class Book {
+class Book {
     int isbn;
     String title, author;
 
@@ -6,5 +6,18 @@ public class Book {
         this.isbn = isbn;
         this.title = title;
         this.author = author;
+    }
+
+    // Add these getters
+    public int getIsbn() {
+        return isbn;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public String getAuthor() {
+        return author;
     }
 }

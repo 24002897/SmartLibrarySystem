@@ -26,10 +26,11 @@ class BookBST {
     }
 
     private void inOrder(BSTNode r) {
-        if (r == null) return;
-        inOrder(r.left);
-        System.out.println("ISBN: " + r.book.isbn + " | Title: " + r.book.title + " | Author: " + r.book.author);
-        inOrder(r.right);
+    if (r == null) return;
+    inOrder(r.left);
+    System.out.println("ISBN: " + r.book.getIsbn() + " | Title: " + r.book.getTitle() + " | Author: " + r.book.getAuthor());
+    inOrder(r.right);
     }
+
 }
 
