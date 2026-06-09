@@ -18,7 +18,7 @@ public class BookBST {
         if (node == null) {
             return new Book(isbn, title, author);
         }
-
+        
         if (isbn < node.isbn) {
             node.left = insertRecursive(node.left, isbn, title, author);
         }
