@@ -7,6 +7,8 @@ public class SmartLibrary implements LibraryADT {
     private BookBST catalogue;
     private Stack history;
 
+    private static final double FINE_PER_DAY = 2.00;
+
     public SmartLibrary() {
         catalogue = new BookBST();
         history = new Stack();
@@ -14,6 +16,7 @@ public class SmartLibrary implements LibraryADT {
 
     @Override
     public void addBook(int isbn, String title, String author) {
+
         catalogue.insert(isbn, title, author);
         System.out.println("Book added successfully.");
     }
@@ -24,11 +27,14 @@ public class SmartLibrary implements LibraryADT {
         Book book = catalogue.search(isbn);
 
         if (book != null) {
+
             System.out.println("\n===== BOOK FOUND =====");
             System.out.println("ISBN   : " + book.getIsbn());
             System.out.println("Title  : " + book.getTitle());
             System.out.println("Author : " + book.getAuthor());
+
         } else {
+
             System.out.println("Book not found.");
         }
     }
@@ -42,12 +48,12 @@ public class SmartLibrary implements LibraryADT {
 
             history.push(book);
 
-            System.out.println("Borrowed: " + book.getTitle());
+            System.out.println("Book borrowed successfully.");
+            System.out.println("Title: " + book.getTitle());
 
-            // Uncomment if BST delete() is added later
-            // catalogue.delete(isbn);
 
         } else {
+
             System.out.println("Book not available.");
         }
     }
@@ -61,27 +67,68 @@ public class SmartLibrary implements LibraryADT {
         catalogue.displayAll();
     }
 
+    public void returnBook(int lateDays) {
+
+        Book returnedBook = history.pop();
+
+        if (returnedBook == null) {
+            return;
+        }
+
+        double fine = lateDays * FINE_PER_DAY;
+
+        System.out.println("\n===== BOOK RETURNED =====");
+        System.out.println("ISBN   : " + returnedBook.getIsbn());
+        System.out.println("Title  : " + returnedBook.getTitle());
+        System.out.println("Author : " + returnedBook.getAuthor());
+
+        if (lateDays > 0) {
+
+            System.out.println("Late Days : " + lateDays);
+            System.out.printf("Fine      : RM %.2f%n", fine);
+
+        } else {
+
+            System.out.println("Returned on time.");
+            System.out.println("Fine      : RM 0.00");
+        }
+
+        // Optional:
+        // Add back into catalogue when returned
+
+        catalogue.insert(
+                returnedBook.getIsbn(),
+                returnedBook.getTitle(),
+                returnedBook.getAuthor()
+        );
+    }
+
+    // Menu
     public void runMenu() {
 
         Scanner sc = new Scanner(System.in);
 
         while (true) {
 
-            System.out.println("\n===== SMART LIBRARY SYSTEM =====");
+            System.out.println("\n========== SMART LIBRARY SYSTEM ==========");
             System.out.println("1. Add Book");
             System.out.println("2. Search Book");
             System.out.println("3. Borrow Book");
-            System.out.println("4. View History");
-            System.out.println("5. View Catalogue");
-            System.out.println("6. Exit");
+            System.out.println("4. Return Book");
+            System.out.println("5. View History");
+            System.out.println("6. View Catalogue");
+            System.out.println("7. Exit");
             System.out.print("Enter choice: ");
 
             int choice;
 
             try {
+
                 choice = Integer.parseInt(sc.nextLine());
+
             } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a number.");
+
+                System.out.println("Invalid input.");
                 continue;
             }
 
@@ -101,6 +148,7 @@ public class SmartLibrary implements LibraryADT {
                         String author = sc.nextLine();
 
                         if (title.trim().isEmpty() || author.trim().isEmpty()) {
+
                             System.out.println("Title and Author cannot be empty.");
                             break;
                         }
@@ -108,6 +156,7 @@ public class SmartLibrary implements LibraryADT {
                         addBook(isbn, title, author);
 
                     } catch (NumberFormatException e) {
+
                         System.out.println("ISBN must be numeric.");
                     }
 
@@ -116,9 +165,14 @@ public class SmartLibrary implements LibraryADT {
                 case 2:
 
                     try {
+
                         System.out.print("Enter ISBN to search: ");
-                        searchBook(Integer.parseInt(sc.nextLine()));
+                        int isbn = Integer.parseInt(sc.nextLine());
+
+                        searchBook(isbn);
+
                     } catch (NumberFormatException e) {
+
                         System.out.println("ISBN must be numeric.");
                     }
 
@@ -127,28 +181,59 @@ public class SmartLibrary implements LibraryADT {
                 case 3:
 
                     try {
+
                         System.out.print("Enter ISBN to borrow: ");
-                        borrowBook(Integer.parseInt(sc.nextLine()));
+                        int isbn = Integer.parseInt(sc.nextLine());
+
+                        borrowBook(isbn);
+
                     } catch (NumberFormatException e) {
+
                         System.out.println("ISBN must be numeric.");
                     }
 
                     break;
 
                 case 4:
-                    viewHistory();
+
+                    try {
+
+                        System.out.print("Enter number of late days: ");
+                        int lateDays = Integer.parseInt(sc.nextLine());
+
+                        if (lateDays < 0) {
+
+                            System.out.println("Late days cannot be negative.");
+                            break;
+                        }
+
+                        returnBook(lateDays);
+
+                    } catch (NumberFormatException e) {
+
+                        System.out.println("Invalid number.");
+                    }
+
                     break;
 
                 case 5:
-                    viewCatalogue();
+
+                    viewHistory();
                     break;
 
                 case 6:
-                    System.out.println("Exiting Smart Library System...");
+
+                    viewCatalogue();
+                    break;
+
+                case 7:
+
+                    System.out.println("Thank you for using Smart Library System.");
                     sc.close();
                     return;
 
                 default:
+
                     System.out.println("Invalid menu option.");
             }
         }
