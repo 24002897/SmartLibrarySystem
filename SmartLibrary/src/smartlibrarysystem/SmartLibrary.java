@@ -102,10 +102,10 @@ public class SmartLibrary implements LibraryADT {
         }
     }
 
-    @Override
-    public void viewHistory() {
-        history.displayHistory();
-    }
+//    @Override
+//    public void viewHistory() {
+//        history.displayHistory();
+//    }
 
     @Override
     public void viewDetailedHistory() {
@@ -141,7 +141,7 @@ public class SmartLibrary implements LibraryADT {
             if (catalogue != null) {
                 catalogue.saveToFile(writer);
             }
-            System.out.println(">>> All data updates saved successfully to " + FILE_NAME);
+     
         } catch (IOException e) {
             System.out.println(">>> Error: System tracking state could not be saved to storage device.");
         }
@@ -157,7 +157,7 @@ public class SmartLibrary implements LibraryADT {
             System.out.println("3. Borrow Book ");
             System.out.println("4. Return Book ");
             System.out.println("5. View History");
-            System.out.println("6. View Detailed History");
+//            System.out.println("6. View Detailed History");
             System.out.println("7. View Catalogue");
             System.out.println("8. Exit");
             System.out.print("Enter choice: ");
@@ -224,11 +224,11 @@ public class SmartLibrary implements LibraryADT {
                     }
                     break;
 
-                case 5:
-                    viewHistory();
-                    break;
+//                case 5:
+//                    viewHistory();
+//                    break;
 
-                case 6:
+                case 5:
                     viewDetailedHistory();
                     break;
 
