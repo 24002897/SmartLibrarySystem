@@ -32,7 +32,7 @@ public interface LibraryADT {
     // ── HISTORY OPERATIONS (STACK) ──────────────────────────────────────────
 
     // View simple borrowing history (most recent on top)
-    void viewHistory();
+//    void viewHistory();
 
     // View detailed borrowing history with matrix number and due dates
     void viewDetailedHistory();
