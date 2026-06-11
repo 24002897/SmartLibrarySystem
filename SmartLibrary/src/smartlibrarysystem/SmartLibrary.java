@@ -3,11 +3,6 @@ package smartlibrarysystem;
 import java.time.LocalDate;
 import java.util.Scanner;
 
-// ============================================================
-// Task 5 - Admin Logic: SmartLibrary.java
-// Implements LibraryADT - connects BST catalogue + Stack history
-// ============================================================
-
 public class SmartLibrary implements LibraryADT {
 
     private BookBST catalogue;
@@ -19,8 +14,6 @@ public class SmartLibrary implements LibraryADT {
         catalogue = new BookBST();
         history = new Stack();
     }
-
-    // ── CATALOGUE OPERATIONS ────────────────────────────────────────────────
 
     @Override
     public void addBook(int isbn, String title, String author) {
@@ -45,8 +38,6 @@ public class SmartLibrary implements LibraryADT {
     public void viewCatalogue() {
         catalogue.displayAll();
     }
-
-    // ── BORROWING OPERATIONS ─────────────────────────────────────────────────
 
     @Override
     public void borrowBook(int isbn) {
@@ -105,8 +96,6 @@ public class SmartLibrary implements LibraryADT {
         }
     }
 
-    // ── HISTORY OPERATIONS ───────────────────────────────────────────────────
-
     @Override
     public void viewHistory() {
         history.displayHistory();
@@ -116,8 +105,6 @@ public class SmartLibrary implements LibraryADT {
     public void viewDetailedHistory() {
         history.displayDetailedHistory();
     }
-
-    // ── CONSOLE MENU ─────────────────────────────────────────────────────────
 
     public void runMenu() {
         Scanner sc = new Scanner(System.in);
