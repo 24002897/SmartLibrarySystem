@@ -181,35 +181,53 @@ public class Stack {
     
     // NEW: Return book and get details for fine calculation
     // UPDATED: Pass returnDate as a parameter for easier testing!
-public BorrowRecord returnBookWithDetails(LocalDate returnDate) {
+public BorrowRecord returnBookWithDetails(int isbn, String matrixNumber, LocalDate returnDate) {
     if (detailedHistory.isEmpty()) {
         System.out.println("Error: No borrowing history with details");
         return null;
     }
     
-    BorrowRecord returned = detailedHistory.remove(detailedHistory.size() - 1);
+    BorrowRecord targetRecord = null;
+    int targetIndex = -1;
     
-    if (!history.isEmpty()) {
-        history.remove(history.size() - 1);
+    for (int i = 0; i < detailedHistory.size(); i++) {
+            BorrowRecord record = detailedHistory.get(i);
+            if (record.getBook().getIsbn() == isbn && record.getMatrixNumber().equals(matrixNumber)) {
+                targetRecord = record;
+                targetIndex = i;
+                break;
+            }
     }
     
-    System.out.println("\n Book returned: " + returned.getBook().getTitle());
-    System.out.println("  Matrix: " + returned.getMatrixNumber());
-    System.out.println("  Borrowed: " + returned.getBorrowDate());
-    System.out.println("  Due date: " + returned.getDueDate());
+    if (targetRecord == null) {
+            System.out.println("Error: No matching borrow record found for Matrix " + matrixNumber + " and ISBN " + isbn);
+            return null;
+        }
     
-    // Calculate days overdue based on the passed returnDate
-    if (returnDate.isAfter(returned.getDueDate())) {
-        long daysLate = ChronoUnit.DAYS.between(returned.getDueDate(), returnDate);
-        double fine = daysLate * 1.00;
-        System.out.println("  OVERDUE by " + daysLate + " days");
-        System.out.println("  Fine: RM" + fine);
-    } else {
-        System.out.println("  Returned on time! No fine.");
-    }
+    detailedHistory.remove(targetIndex);
+        if (targetIndex < history.size()) {
+            history.remove(targetIndex);
+        }
+        
+        System.out.println("\n Book returned: " + targetRecord.getBook().getTitle());
+        System.out.println("  Matrix: " + targetRecord.getMatrixNumber());
+        System.out.println("  Borrowed: " + targetRecord.getBorrowDate());
+        System.out.println("  Due date: " + targetRecord.getDueDate());
+        
+    if (returnDate.isAfter(targetRecord.getDueDate())) {
+            long daysLate = ChronoUnit.DAYS.between(targetRecord.getDueDate(), returnDate);
+            double fine = daysLate * 1.00; 
+            System.out.println("  OVERDUE by " + daysLate + " days");
+            System.out.println("  Fine: RM" + fine);
+        } else {
+            System.out.println("  Returned on time! No fine.");
+        }
+        
+        return targetRecord;
+    }    
+        
     
-    return returned;
-}
+
     
     // NEW: View most recent detailed record
     public BorrowRecord viewMostRecentDetail() {

@@ -26,13 +26,7 @@ public interface LibraryADT {
     void returnBook(int lateDays);
 
     // Return a book with a specific return date for fine calculation
-    void returnBookWithDetails(LocalDate returnDate);
-
-
-    // ── HISTORY OPERATIONS (STACK) ──────────────────────────────────────────
-
-    // View simple borrowing history (most recent on top)
-//    void viewHistory();
+    void returnBookWithDetails(int isbn, String matrixNumber, LocalDate returnDate);
 
     // View detailed borrowing history with matrix number and due dates
     void viewDetailedHistory();

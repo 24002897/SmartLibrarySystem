@@ -91,21 +91,18 @@ public class SmartLibrary implements LibraryADT {
     }
 
     @Override
-    public void returnBookWithDetails(LocalDate returnDate) {
-        Stack.BorrowRecord record = history.returnBookWithDetails(returnDate);
+    public void returnBookWithDetails(int isbn, String matrixNumber, LocalDate returnDate) {
+        Stack.BorrowRecord record = history.returnBookWithDetails(isbn, matrixNumber, returnDate);
         if (record != null) {
             catalogue.insert(
                 record.getBook().getIsbn(),
                 record.getBook().getTitle(),
                 record.getBook().getAuthor()
-            );
+            );      
+            saveBooksToFile();
+            System.out.println(">>> Database file successfully updated with returned book.");
         }
     }
-
-//    @Override
-//    public void viewHistory() {
-//        history.displayHistory();
-//    }
 
     @Override
     public void viewDetailedHistory() {
@@ -157,7 +154,6 @@ public class SmartLibrary implements LibraryADT {
             System.out.println("3. Borrow Book ");
             System.out.println("4. Return Book ");
             System.out.println("5. View History");
-//            System.out.println("6. View Detailed History");
             System.out.println("7. View Catalogue");
             System.out.println("8. Exit");
             System.out.print("Enter choice: ");
@@ -215,18 +211,24 @@ public class SmartLibrary implements LibraryADT {
 
                 case 4:
                     try {
+                        System.out.print("Enter ISBN to return: ");
+                        int returnIsbn = Integer.parseInt(sc.nextLine());
+                        
+                        System.out.print("Enter Matrix Number: ");
+                        String returnMatrix = sc.nextLine();
+                        
                         System.out.print("Enter return date (YYYY-MM-DD): ");
                         String dateInput = sc.nextLine();
                         LocalDate returnDate = LocalDate.parse(dateInput);
-                        returnBookWithDetails(returnDate);
+                        
+                        returnBookWithDetails(returnIsbn, returnMatrix, returnDate);
+                        
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid input. ISBN must be numeric.");
                     } catch (Exception e) {
-                        System.out.println("Invalid date format. Use YYYY-MM-DD.");
+                        System.out.println("Invalid date format. Please use YYYY-MM-DD.");
                     }
                     break;
-
-//                case 5:
-//                    viewHistory();
-//                    break;
 
                 case 5:
                     viewDetailedHistory();
