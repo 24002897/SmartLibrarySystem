@@ -95,34 +95,6 @@ public class Stack {
         System.out.println("Borrowing history has been cleared.");
     }
     
-//    public void displayHistory() {
-//        System.out.println("\n========================================");
-//        System.out.println("           STUDENT BORROWING HISTORY            ");
-//        System.out.println("========================================");
-//        
-//        if (history.isEmpty()) {
-//            System.out.println("No borrowing history found.");
-//            System.out.println("   (Student has not borrowed any books yet)\n");
-//            return;
-//        }
-//        
-//        System.out.println("Showing most recent first:\n");
-//        
-//        // Loop backwards to show most recent on top
-//        for (int i = history.size() - 1; i >= 0; i--) {
-//            int position = history.size() - i;  
-//            Book book = history.get(i);
-//            System.out.println(position + ". \"" + book.getTitle() + "\"");
-//            System.out.println("   Author: " + book.getAuthor());
-//            System.out.println("   ISBN: " + book.getIsbn());
-//            System.out.println("   ========================================");
-//        }
-//        
-//        System.out.println("========================================");
-//        System.out.println("Total books borrowed: " + history.size());
-//        System.out.println("========================================\n");
-//    }
-    
     public void displaySimpleHistory() {
         if (history.isEmpty()) {
             System.out.println("Borrowing history is empty.");
@@ -226,9 +198,7 @@ public BorrowRecord returnBookWithDetails(int isbn, String matrixNumber, LocalDa
         return targetRecord;
     }    
         
-    
-
-    
+  
     // NEW: View most recent detailed record
     public BorrowRecord viewMostRecentDetail() {
         if (detailedHistory.isEmpty()) {
