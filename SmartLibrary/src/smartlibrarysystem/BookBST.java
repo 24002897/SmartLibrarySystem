@@ -11,6 +11,7 @@ public class BookBST {
         root = null;
     }
 
+    //Add a book to the catalogue
     public void insert(int isbn, String title, String author) {
         root = insertRecursive(root, isbn, title, author);
     }
@@ -34,7 +35,7 @@ public class BookBST {
         return node;
     }
 
-
+    //Search for a book by ISBN
     public Book search(int isbn) {
 
         if (isbn <= 0) {
@@ -78,6 +79,7 @@ public class BookBST {
         inOrder(root);
     }
 
+    //Using inOrder traversal to display books in sorted order by ISBN
     private void inOrder(Book node) {
 
         if (node == null) {
@@ -94,6 +96,32 @@ public class BookBST {
 
         inOrder(node.right);
     }
+
+    //Remove the book if book is borrowed
+    public void delete(int isbn) {
+        root = del(root, isbn);
+    }
+
+    private BSTNode del(BSTNode r, int i) {
+        if (r == null) return null;
+        if (i < r.book.getIsbn())
+            r.left = del(r.left, i);
+        else if (i > r.book.getIsbn())
+            r.right = del(r.right, i);
+        else {
+            if (r.left == null) return r.right;
+            if (r.right == null) return r.left;
+            BSTNode min = findMin(r.right);
+            r.book = min.book;
+            r.right = del(r.right, min.book.getIsbn());
+        }
+        return r;
+    }
+    private BSTNode findMin(BSTNode r) {
+        while (r.left != null) r = r.left;
+        return r;
+}
+    //Save information about books to file
     public void saveToFile(PrintWriter writer) {
         saveToFileHelper(root, writer);
     }

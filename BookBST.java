@@ -1,3 +1,5 @@
+import smartlibrarysystem.BSTNode;
+
 class BookBST {
     private BSTNode root;
 
@@ -32,5 +34,27 @@ class BookBST {
     inOrder(r.right);
     }
 
+    public void delete(int isbn) {
+        root = del(root, isbn);
+    }
+
+    private BSTNode del(BSTNode r, int i) {
+        if (r == null) return null;
+        if (i < r.book.getIsbn())
+            r.left = del(r.left, i);
+        else if (i > r.book.getIsbn())
+            r.right = del(r.right, i);
+        else {
+            if (r.left == null) return r.right;
+            if (r.right == null) return r.left;
+            BSTNode min = findMin(r.right);
+            r.book = min.book;
+            r.right = del(r.right, min.book.getIsbn());
+        }
+        return r;
+    }
+    private BSTNode findMin(BSTNode r) {
+        while (r.left != null) r = r.left;
+        return r;
 }
 

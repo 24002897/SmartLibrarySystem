@@ -8,7 +8,6 @@ class Book {
         this.author = author;
     }
 
-    // Add these getters
     public int getIsbn() {
         return isbn;
     }
