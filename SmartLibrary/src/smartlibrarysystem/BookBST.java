@@ -1,5 +1,7 @@
 package smartlibrarysystem;
 
+import java.io.PrintWriter;
+
 public class BookBST {
 
     private Book root;
@@ -91,5 +93,18 @@ public class BookBST {
         );
 
         inOrder(node.right);
+    }
+    public void saveToFile(PrintWriter writer) {
+        saveToFileHelper(root, writer);
+    }
+
+    private void saveToFileHelper(Book node, PrintWriter writer) {
+        if (node != null) {
+            saveToFileHelper(node.left, writer); 
+            
+            writer.println(node.isbn + "," + node.title + "," + node.author);
+            
+            saveToFileHelper(node.right, writer);
+        }
     }
 }

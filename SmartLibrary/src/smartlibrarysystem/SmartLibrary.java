@@ -1,5 +1,9 @@
 package smartlibrarysystem;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.PrintWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Scanner;
 
@@ -9,10 +13,12 @@ public class SmartLibrary implements LibraryADT {
     private Stack history;
 
     private static final double FINE_PER_DAY = 2.00;
+    private static final String FILE_NAME = "books.txt"; 
 
     public SmartLibrary() {
         catalogue = new BookBST();
         history = new Stack();
+        loadBooksFromFile();
     }
 
     @Override
@@ -26,8 +32,8 @@ public class SmartLibrary implements LibraryADT {
         Book book = catalogue.search(isbn);
         if (book != null) {
             System.out.println("\n===== BOOK FOUND =====");
-            System.out.println("ISBN   : " + book.getIsbn());
-            System.out.println("Title  : " + book.getTitle());
+            System.out.println("ISBN    : " + book.getIsbn());
+            System.out.println("Title   : " + book.getTitle());
             System.out.println("Author : " + book.getAuthor());
         } else {
             System.out.println("Book not found.");
@@ -69,8 +75,8 @@ public class SmartLibrary implements LibraryADT {
         double fine = lateDays * FINE_PER_DAY;
 
         System.out.println("\n===== BOOK RETURNED =====");
-        System.out.println("ISBN   : " + returnedBook.getIsbn());
-        System.out.println("Title  : " + returnedBook.getTitle());
+        System.out.println("ISBN    : " + returnedBook.getIsbn());
+        System.out.println("Title   : " + returnedBook.getTitle());
         System.out.println("Author : " + returnedBook.getAuthor());
 
         if (lateDays > 0) {
@@ -104,6 +110,41 @@ public class SmartLibrary implements LibraryADT {
     @Override
     public void viewDetailedHistory() {
         history.displayDetailedHistory();
+    }
+
+    private void loadBooksFromFile() {
+        try (BufferedReader reader = new BufferedReader(new FileReader(FILE_NAME))) {
+            String line;
+            int counter = 0;
+            while ((line = reader.readLine()) != null) {
+                String[] parts = line.split(",");
+                if (parts.length == 3) {
+                    int isbn = Integer.parseInt(parts[0].trim());
+                    String title = parts[1].trim();
+                    String author = parts[2].trim();
+                    catalogue.insert(isbn, title, author);
+                    counter++;
+                }
+            }
+            if (counter > 0) {
+                System.out.println(">>> System database sync complete: " + counter + " record(s) loaded.");
+            }
+        } catch (IOException e) {
+            System.out.println(">>> Database configuration file not found. Starting with an empty catalog profiles.");
+        } catch (NumberFormatException e) {
+            System.out.println(">>> Corrupt numeric format detected inside database file index.");
+        }
+    }
+
+    private void saveBooksToFile() {
+        try (PrintWriter writer = new PrintWriter(FILE_NAME)) {
+            if (catalogue != null) {
+                catalogue.saveToFile(writer);
+            }
+            System.out.println(">>> All library data updates saved successfully to " + FILE_NAME);
+        } catch (IOException e) {
+            System.out.println(">>> Error: System tracking state could not be saved to storage device.");
+        }
     }
 
     public void runMenu() {
@@ -221,6 +262,7 @@ public class SmartLibrary implements LibraryADT {
                     break;
 
                 case 10:
+                    saveBooksToFile();
                     System.out.println("Thank you for using Smart Library System.");
                     sc.close();
                     return;
