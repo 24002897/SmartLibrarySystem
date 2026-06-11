@@ -141,7 +141,7 @@ public class SmartLibrary implements LibraryADT {
             if (catalogue != null) {
                 catalogue.saveToFile(writer);
             }
-            System.out.println(">>> All library data updates saved successfully to " + FILE_NAME);
+            System.out.println(">>> All data updates saved successfully to " + FILE_NAME);
         } catch (IOException e) {
             System.out.println(">>> Error: System tracking state could not be saved to storage device.");
         }
@@ -154,14 +154,12 @@ public class SmartLibrary implements LibraryADT {
             System.out.println("\n========== SMART LIBRARY SYSTEM ==========");
             System.out.println("1. Add Book");
             System.out.println("2. Search Book");
-            System.out.println("3. Borrow Book");
-            System.out.println("4. Borrow Book (with Matrix & Due Date)");
-            System.out.println("5. Return Book");
-            System.out.println("6. Return Book (with Return Date)");
-            System.out.println("7. View History");
-            System.out.println("8. View Detailed History");
-            System.out.println("9. View Catalogue");
-            System.out.println("10. Exit");
+            System.out.println("3. Borrow Book ");
+            System.out.println("4. Return Book ");
+            System.out.println("5. View History");
+            System.out.println("6. View Detailed History");
+            System.out.println("7. View Catalogue");
+            System.out.println("8. Exit");
             System.out.print("Enter choice: ");
 
             int choice;
@@ -206,39 +204,16 @@ public class SmartLibrary implements LibraryADT {
                     try {
                         System.out.print("Enter ISBN to borrow: ");
                         int isbn = Integer.parseInt(sc.nextLine());
-                        borrowBook(isbn);
+                        System.out.print("Enter Matrix Number: ");
+                        String matrix = sc.nextLine();
+                        borrowBookWithDetails(isbn, matrix);
+                        catalogue.delete(isbn);
                     } catch (NumberFormatException e) {
                         System.out.println("ISBN must be numeric.");
                     }
                     break;
 
                 case 4:
-                    try {
-                        System.out.print("Enter ISBN to borrow: ");
-                        int isbn = Integer.parseInt(sc.nextLine());
-                        System.out.print("Enter Matrix Number: ");
-                        String matrix = sc.nextLine();
-                        borrowBookWithDetails(isbn, matrix);
-                    } catch (NumberFormatException e) {
-                        System.out.println("ISBN must be numeric.");
-                    }
-                    break;
-
-                case 5:
-                    try {
-                        System.out.print("Enter number of late days: ");
-                        int lateDays = Integer.parseInt(sc.nextLine());
-                        if (lateDays < 0) {
-                            System.out.println("Late days cannot be negative.");
-                            break;
-                        }
-                        returnBook(lateDays);
-                    } catch (NumberFormatException e) {
-                        System.out.println("Invalid number.");
-                    }
-                    break;
-
-                case 6:
                     try {
                         System.out.print("Enter return date (YYYY-MM-DD): ");
                         String dateInput = sc.nextLine();
@@ -249,20 +224,19 @@ public class SmartLibrary implements LibraryADT {
                     }
                     break;
 
-                case 7:
+                case 5:
                     viewHistory();
                     break;
 
-                case 8:
+                case 6:
                     viewDetailedHistory();
                     break;
 
-                case 9:
+                case 7:
                     viewCatalogue();
                     break;
 
-                case 10:
-                    saveBooksToFile();
+                case 8:
                     System.out.println("Thank you for using Smart Library System.");
                     sc.close();
                     return;
@@ -270,6 +244,7 @@ public class SmartLibrary implements LibraryADT {
                 default:
                     System.out.println("Invalid menu option.");
             }
+            saveBooksToFile();
         }
     }
 }
